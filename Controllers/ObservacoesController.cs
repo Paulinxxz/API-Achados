@@ -1,4 +1,5 @@
 ﻿using Api.Models;
+using Api.Repositorios;
 using Api.Repositorios.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,8 +18,8 @@ namespace Api.Controllers
             _observacoessRepositorio = observacoessRepositorio;
         }
 
-        [HttpGet("GetAllObservacoes")]
-        public async Task<ActionResult<List<ObservacoesModel>>> GetAllObservacoes()
+        [HttpGet("GetAllObservacoess")]
+        public async Task<ActionResult<List<ObservacoesModel>>> GetAllObservacoess()
         {
             List<ObservacoesModel> observacoess = await _observacoessRepositorio.GetAll();
             return Ok(observacoess);
@@ -31,11 +32,25 @@ namespace Api.Controllers
             return Ok(observacoes);
         }
 
-        [HttpPost("CreateObservacoes")]
-        public async Task<ActionResult<ObservacoesModel>> InsertObservacoes([FromBody]ObservacoesModel observacoesModel)
+        [HttpPost("InsertObservacoes")]
+        public async Task<ActionResult<ObservacoesModel>> InsertObservacoes([FromBody] ObservacoesModel observacoesModel)
         {
             ObservacoesModel observacoes = await _observacoessRepositorio.InsertObservacoes(observacoesModel);
             return Ok(observacoes);
+        }
+
+        [HttpPut("UpdateObservacoes/{id:int}")]
+        public async Task<ActionResult<ObservacoesModel>> UpdateObservacoes(int id, [FromBody] ObservacoesModel observacoesModel)
+        {
+            observacoesModel.ObservacoesId = id;
+            ObservacoesModel observacoes = await _observacoessRepositorio.UpdateObservacoes(observacoesModel, id);
+            return Ok(observacoes);
+        }
+        [HttpDelete("DeleteObservacoes/{id:int}")]
+        public async Task<ActionResult<ObservacoesModel>> DeleteObservacoes(int id)
+        {
+            bool deleted = await _observacoessRepositorio.DeleteObservacoes(id);
+            return Ok(deleted);
         }
 
     }

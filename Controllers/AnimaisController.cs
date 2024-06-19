@@ -31,12 +31,26 @@ namespace Api.Controllers
             return Ok(animais);
         }
 
-        [HttpPost("CreateAnimais")]
-        public async Task<ActionResult<AnimaisModel>> InsertAnimais([FromBody]AnimaisModel animaisModel)
+        [HttpPost("InsertAnimais")]
+        public async Task<ActionResult<AnimaisModel>> InsertAnimais([FromBody] AnimaisModel animaisModel)
         {
             AnimaisModel animais = await _animaissRepositorio.InsertAnimais(animaisModel);
             return Ok(animais);
         }
 
+        [HttpPut("UpdateAnimais/{id:int}")]
+        public async Task<ActionResult<AnimaisModel>> UpdateAnimais(int id, [FromBody] AnimaisModel animaisModel)
+        {
+            animaisModel.AnimalId = id;
+            AnimaisModel animais = await _animaissRepositorio.UpdateAnimais(animaisModel, id);
+            return Ok(animais);
+        }
+        [HttpDelete("DeleteAnimais/{id:int}")]
+        public async Task<ActionResult<AnimaisModel>> DeleteAnimais(int id)
+        {
+            bool deleted = await _animaissRepositorio.DeleteAnimais(id);
+            return Ok(deleted);
+        }
     }
 }
+
